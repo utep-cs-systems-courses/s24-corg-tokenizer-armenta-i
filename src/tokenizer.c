@@ -3,18 +3,25 @@
 #include <stdlib.h>
 
 char userInput[50];
-//Array user to store user input
-char *token;
+//Array of tokenized user input
 // pointer to keep track of token in strings
-int result;
+int token_count;
 
 int main(){  
   printf("Enter the string you want to tokenize:\n$");
-  fgets(userInput, sizeof(userInput), stdin);
-  printf("%s\n",userInput);  
+  scanf("%49[^\n]", userInput);
+  printf("%s\n",userInput);
 
-  char **input_array = tokenize(userInput);
-  print_tokens(input_array);
+  char **user_tokens = tokenize(userInput);
+  
+  printf("Printing Tokens:\n");
+  print_tokens(user_tokens);
+  /*
+  token_count = count_tokens(userInput);
+  printf("Number of Tokens: %d\n", token_count);
+
+  free_tokens(user_tokens);*/ // Free the allocated memory for tokens 
+  return 0;
 }
 
 /* Return true (non-zero) if c is a whitespace character ('\t' or ' ').
@@ -43,7 +50,7 @@ int non_space_char(char c){
 /* Returns a pointer to the first character of the next space-separated token in zero-terminated str.
    Return a zero pointer if str does not contain any tokens. */
 char *token_start(char *str){
-  while(*str != '\0' || *str != ' '){
+  while(*str != '\0' && *str != ' '){
     if(non_space_char(*str)){
 	return str;
       }
@@ -61,7 +68,7 @@ char *token_terminator(char *str){
       str++;
   }
     return str;
-    }
+}
 
 
 /* Counts the number of tokens in the string aargument*/
@@ -74,6 +81,8 @@ int count_tokens(char *str)
     if(temp != NULL){
       count++;
       str = token_terminator(temp);
+    } else{
+      break;
     }
   }
   return count;
@@ -82,10 +91,10 @@ int count_tokens(char *str)
 char *copy_str(char *inStr, short len){
   char *result = malloc((len + 1) * sizeof(char)); //memory allocation for char pointer of len + 1 for chars in inStr
   int i;
-  for(int i = 0; i < 0; i++){
+  for(i = 0; i < len; i++){
     result[i] = inStr[i];
   }
-  result += '\0'; // to denote that it ends
+  result[i] = '\0'; // to denote string ends
   return result;
 }
 
@@ -98,33 +107,37 @@ char **tokenize(char *str){
   char *str_copy = str; //copy of str param
   int i; //counter
 
-  for(i = 0; i < total_tokens;i++){
+  for(i = 0; str_copy != NULL ;i++){
     str_copy = token_start(str_copy); //pointer for start of curr token
     char *endof_token = token_terminator(str_copy); //pointer to end of curr token
     int token_length = endof_token - str_copy;
     //Put the token into token_array
     token_array[i] = copy_str(str_copy, token_length);
-    str_copy = token_terminator(str_copy);
+    str_copy = endof_token;
+    
   }
-  token_array += '\0'; //to denote end of arr
-  //free(str_copy); //cleans pointer
+  token_array[i] = NULL; //to denote end of arr
   return token_array; //return array of strings
 }
 
 /* Prints all tokens*/
 void print_tokens(char **tokens){
   int i = 0;
-  while(tokens[i]){
-    printf("Token %d%s\n", i, tokens[i]);
+  while(tokens[i] != NULL){
+    printf("Token %d: %s\n", i, tokens[i]);
     i++;
   }
 }
 
 /* Frees all tokens and the vector themx. */
 void free_tokens(char **tokens){
-  int i = 0;
-  while(tokens[i]){
+  int i;
+  /*while(tokens[i]){
     free(tokens[i]);
     i++;
+  }*/
+  for(i = 0; tokens[i] != NULL; i++){
+    free(tokens[i]);
   }
+  free(tokens);
 }
