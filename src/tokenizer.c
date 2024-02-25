@@ -1,9 +1,21 @@
-A#include <tokenizer.h>
+#include "tokenizer.h"
+#include <stdio.h>
+#include <stdlib.h>
 
+char userInput[50];
+//Array user to store user input
+char *token;
+// pointer to keep track of token in strings
+
+int main(){  
+  printf("Enter the string you want to tokenize:\n$");
+  fgets(userInput, sizeof(userInput), stdin);
+  printf("%s\n",userInput);
+}
 /* Return true (non-zero) if c is a whitespace character ('\t' or ' ').
    Zero terminators are not printable (therefore false) */
 int space_char(char c){
-  if(c == ' ' || c == '\t'){
+  if((c == ' ' || c == '\t') && c != '\0'){
     return 1;
   }
   else{
@@ -15,7 +27,7 @@ int space_char(char c){
    Zero terminators are not printable (therefore false) */
 
 int non_space_char(char c){
-  if(isspace(c)){
+  if(c == ' ' || c == '\t' || c == '\0'){
     return 0;
   }
   else{
@@ -26,12 +38,16 @@ int non_space_char(char c){
 /* Returns a pointer to the first character of the next space-separated token in zero-terminated str.
    Return a zero pointer if str does not contain any tokens. */
 char *token_start(char *str){
-  while(*str != '\0' && (*str == ' ' || *str == '\t')){
+  while(*str != '\0' && *str == ' '){
     str++;
   }
+
   if(*str == '\0'){
     return NULL;
   }
+  if(non_space_char(*str)){
+      return 0;
+    }
   return str;
 }
 /* Returns a pointer terminator char following *token */
