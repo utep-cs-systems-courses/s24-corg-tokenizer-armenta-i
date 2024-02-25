@@ -11,15 +11,7 @@ int result;
 int main(){  
   printf("Enter the string you want to tokenize:\n$");
   fgets(userInput, sizeof(userInput), stdin);
-  printf("%s\n",userInput);
-
-  //userInput goes to token
-  token = token_start(userInput);
-  printf("Token: %s\n", token);
-  token = token_terminator(userInput);
-  printf("Token %s\n", token);
-  result = count_tokens(userInput);
-  
+  printf("%s\n",userInput);  
 }
 /* Return true (non-zero) if c is a whitespace character ('\t' or ' ').
    Zero terminators are not printable (therefore false) */
