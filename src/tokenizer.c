@@ -6,11 +6,20 @@ char userInput[50];
 //Array user to store user input
 char *token;
 // pointer to keep track of token in strings
+int result;
 
 int main(){  
   printf("Enter the string you want to tokenize:\n$");
   fgets(userInput, sizeof(userInput), stdin);
   printf("%s\n",userInput);
+
+  //userInput goes to token
+  token = token_start(userInput);
+  printf("Token: %s\n", token);
+  token = token_terminator(userInput);
+  printf("Token %s\n", token);
+  result = count_tokens(userInput);
+  
 }
 /* Return true (non-zero) if c is a whitespace character ('\t' or ' ').
    Zero terminators are not printable (therefore false) */
@@ -38,24 +47,41 @@ int non_space_char(char c){
 /* Returns a pointer to the first character of the next space-separated token in zero-terminated str.
    Return a zero pointer if str does not contain any tokens. */
 char *token_start(char *str){
-  while(*str != '\0' && *str == ' '){
+  while(*str != '\0' || *str != ' '){
+    if(non_space_char(*str)){
+	return str;
+      }
     str++;
   }
 
-  if(*str == '\0'){
-    return NULL;
-  }
-  if(non_space_char(*str)){
-      return 0;
-    }
   return str;
 }
 /* Returns a pointer terminator char following *token */
-char *token_terminator(char *str);
+char *token_terminator(char *str){
+  while(*str != '\0'){
+    if(space_char(*str)){
+	return str;
+      }
+      str++;
+  }
+    return str;
+    }
+
 
 /* Counts the number of tokens in the string aargument*/
-int count_tokens(char *str);
-
+int count_tokens(char *str)
+{
+  int count = 0;
+  char *temp;
+  while(*str != '\0'){
+    temp = token_start(str);
+    if(temp != NULL){
+      count++;
+      str = token_terminator(temp);
+    }
+  }
+  return count;
+}
 /* Return a freshly allocated new zero-terminated string containing <len> chars from <inStr>*/
 char *copy_str(char *inStr, short len);
 
