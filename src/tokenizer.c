@@ -12,7 +12,11 @@ int main(){
   printf("Enter the string you want to tokenize:\n$");
   fgets(userInput, sizeof(userInput), stdin);
   printf("%s\n",userInput);  
+
+  char **input_array = tokenize(userInput);
+  print_tokens(input_array);
 }
+
 /* Return true (non-zero) if c is a whitespace character ('\t' or ' ').
    Zero terminators are not printable (therefore false) */
 int space_char(char c){
@@ -75,20 +79,52 @@ int count_tokens(char *str)
   return count;
 }
 /* Return a freshly allocated new zero-terminated string containing <len> chars from <inStr>*/
-char *copy_str(char *inStr, short len);
+char *copy_str(char *inStr, short len){
+  char *result = malloc((len + 1) * sizeof(char)); //memory allocation for char pointer of len + 1 for chars in inStr
+  int i;
+  for(int i = 0; i < 0; i++){
+    result[i] = inStr[i];
+  }
+  result += '\0'; // to denote that it ends
+  return result;
+}
 
-/* Returns a freshly allocated zero-terminated verctor of freshly allocated space-separated tokens form zero-terminated str.
+/* Returns a freshly allocated zero-terminated vector of freshly allocated space-separated tokens form zero-terminated str.*/
 
- For example, tokenize("hello world string)" would result in:
-    tokens[0] = "hello"
-    tokens[1] = "world"
-    tokens[2] = "string
-    tokens[3] = 0
-*/
-char **tokenize(char *str);
+//Array of strings(Pointer to pointer)
+char **tokenize(char *str){
+  int total_tokens = count_tokens(str); //var to hold # of tokens
+  char **token_array = malloc(sizeof(char *) * (total_tokens + 1)); //array of strings
+  char *str_copy = str; //copy of str param
+  int i; //counter
+
+  for(i = 0; i < total_tokens;i++){
+    str_copy = token_start(str_copy); //pointer for start of curr token
+    char *endof_token = token_terminator(str_copy); //pointer to end of curr token
+    int token_length = endof_token - str_copy;
+    //Put the token into token_array
+    token_array[i] = copy_str(str_copy, token_length);
+    str_copy = token_terminator(str_copy);
+  }
+  token_array += '\0'; //to denote end of arr
+  //free(str_copy); //cleans pointer
+  return token_array; //return array of strings
+}
 
 /* Prints all tokens*/
-void print_tokens(char **tokens);
+void print_tokens(char **tokens){
+  int i = 0;
+  while(tokens[i]){
+    printf("Token %d%s\n", i, tokens[i]);
+    i++;
+  }
+}
 
 /* Frees all tokens and the vector themx. */
-void free_tokens(char **tokens);
+void free_tokens(char **tokens){
+  int i = 0;
+  while(tokens[i]){
+    free(tokens[i]);
+    i++;
+  }
+}
