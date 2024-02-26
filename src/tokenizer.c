@@ -7,22 +7,37 @@ char userInput[50];
 //Array of tokenized user input
 // pointer to keep track of token in strings
 int token_count;
+char **user_tokens;
 
 int main(){  
   printf("Enter the string you want to tokenize:\n$");
-  scanf("%49[^\n]", userInput);
+  fgets(userInput, sizeof(userInput), stdin);
   printf("%s\n",userInput);
 
-  //char **user_tokens = tokenize(userInput);
-  //token_count = count_tokens(userInput);
-  //printf("NUM %d", token_count);
-  char* token = userInput;
-
-  token = token_start(token);
-  printf("Token: %s\n", token);
-  token = token_terminator(token);
-  printf("Token: %s\n", token);
+  user_tokens = tokenize(userInput);
+  token_count = count_tokens(userInput);
+  printf("NUM %d", token_count);
+  //char* token = userInput;
+  //int i = 0;
   
+  //print_tokens(user_tokens);
+  
+
+ // Iterating through words
+  /*char* startOfToken = token_start(userInput);
+    char* endOfToken;
+
+    while (*startOfToken != '\0') {
+        endOfToken = token_terminator(startOfToken);
+
+        // Print the token
+        printf("Token: %.*s\n", (int)(endOfToken - startOfToken), startOfToken);
+
+        // Move to the next word
+        startOfToken = token_start(endOfToken + 1);  // Move to the next character after the end of the current word
+	}*/
+
+    
   return 0;
 }
 
@@ -51,38 +66,14 @@ int non_space_char(char c){
 
 /* Returns a pointer to the first character of the next space-separated token in zero-terminated str.
    Return a zero pointer if str does not contain any tokens. */
-char *token_start(char *str){
+char *token_start(char *str){ 
   while(*str != '\0' && space_char(*str)){
-      str++;
-  }
-  //if string is empty return NULL
-  if(*str == '\0'){
-    return NULL;
-  }
-  //get current position of token
-  char *startPos = str; //Questionable
-
-  while(*str != '\0' && *str != ' '){
     str++;
   }
-  if (*str != '\0') {
-        *str = '\0';
-        str++;
-  }
-
-  return startPos;
+  return str;
 }
 /* Returns a pointer terminator char following *token */
 char *token_terminator(char *str){
-  while(*str != '\0' && non_space_char(*str)){
-    str++;
-  }
-  if(*str == '\0'){
-    return NULL;
-  }
-
-  //char *endPost = str;
-  
   while(*str != '\0' && *str != ' '){
     str++;
   }
