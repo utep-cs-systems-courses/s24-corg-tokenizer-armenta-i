@@ -1,6 +1,7 @@
 #include "tokenizer.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 char userInput[50];
 //Array of tokenized user input
@@ -12,15 +13,16 @@ int main(){
   scanf("%49[^\n]", userInput);
   printf("%s\n",userInput);
 
-  char **user_tokens = tokenize(userInput);
-  
-  printf("Printing Tokens:\n");
-  print_tokens(user_tokens);
-  /*
-  token_count = count_tokens(userInput);
-  printf("Number of Tokens: %d\n", token_count);
+  //char **user_tokens = tokenize(userInput);
+  //token_count = count_tokens(userInput);
+  //printf("NUM %d", token_count);
+  char* token = userInput;
 
-  free_tokens(user_tokens);*/ // Free the allocated memory for tokens 
+  token = token_start(token);
+  printf("Token: %s\n", token);
+  token = token_terminator(token);
+  printf("Token: %s\n", token);
+  
   return 0;
 }
 
@@ -50,24 +52,41 @@ int non_space_char(char c){
 /* Returns a pointer to the first character of the next space-separated token in zero-terminated str.
    Return a zero pointer if str does not contain any tokens. */
 char *token_start(char *str){
+  while(*str != '\0' && space_char(*str)){
+      str++;
+  }
+  //if string is empty return NULL
+  if(*str == '\0'){
+    return NULL;
+  }
+  //get current position of token
+  char *startPos = str; //Questionable
+
   while(*str != '\0' && *str != ' '){
-    if(non_space_char(*str)){
-	return str;
-      }
     str++;
   }
+  if (*str != '\0') {
+        *str = '\0';
+        str++;
+  }
 
-  return str;
+  return startPos;
 }
 /* Returns a pointer terminator char following *token */
 char *token_terminator(char *str){
-  while(*str != '\0'){
-    if(space_char(*str)){
-	return str;
-      }
-      str++;
+  while(*str != '\0' && non_space_char(*str)){
+    str++;
   }
-    return str;
+  if(*str == '\0'){
+    return NULL;
+  }
+
+  //char *endPost = str;
+  
+  while(*str != '\0' && *str != ' '){
+    str++;
+  }
+  return str;
 }
 
 
@@ -132,10 +151,6 @@ void print_tokens(char **tokens){
 /* Frees all tokens and the vector themx. */
 void free_tokens(char **tokens){
   int i;
-  /*while(tokens[i]){
-    free(tokens[i]);
-    i++;
-  }*/
   for(i = 0; tokens[i] != NULL; i++){
     free(tokens[i]);
   }
