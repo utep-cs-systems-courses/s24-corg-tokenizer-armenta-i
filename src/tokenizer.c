@@ -6,7 +6,7 @@
 char userInput[50];
 //Array of tokenized user input
 // pointer to keep track of token in strings
-int token_count;
+int token_count, i;
 char **user_tokens;
 
 int main(){  
@@ -16,28 +16,15 @@ int main(){
 
   user_tokens = tokenize(userInput);
   token_count = count_tokens(userInput);
-  printf("NUM %d", token_count);
-  //char* token = userInput;
-  //int i = 0;
-  
+  printf("NUM %d\n", token_count);
+
+  //code below is used to test for answers
+  i=1;
   //print_tokens(user_tokens);
-  
-
- // Iterating through words
-  /*char* startOfToken = token_start(userInput);
-    char* endOfToken;
-
-    while (*startOfToken != '\0') {
-        endOfToken = token_terminator(startOfToken);
-
-        // Print the token
-        printf("Token: %.*s\n", (int)(endOfToken - startOfToken), startOfToken);
-
-        // Move to the next word
-        startOfToken = token_start(endOfToken + 1);  // Move to the next character after the end of the current word
-	}*/
-
-    
+  while(i <= token_count){
+    printf("ARRAY: %s\n", user_tokens[i]);
+    i++;
+  }    
   return 0;
 }
 
@@ -114,18 +101,21 @@ char *copy_str(char *inStr, short len){
 char **tokenize(char *str){
   int total_tokens = count_tokens(str); //var to hold # of tokens
   char **token_array = malloc(sizeof(char *) * (total_tokens + 1)); //array of strings
-  char *str_copy = str; //copy of str param
-  int i; //counter
+  int i, length; //array of strings index
+  char *startOfToken = token_start(str); //pointer to first word
+  char *endOfToken;
 
-  for(i = 0; str_copy != NULL ;i++){
-    str_copy = token_start(str_copy); //pointer for start of curr token
-    char *endof_token = token_terminator(str_copy); //pointer to end of curr token
-    int token_length = endof_token - str_copy;
-    //Put the token into token_array
-    token_array[i] = copy_str(str_copy, token_length);
-    str_copy = endof_token;
-    
-  }
+  //loop to populate array of strings with tokens
+   while (*startOfToken != '\0') {
+     endOfToken = token_terminator(startOfToken); //pointer to end of word
+     length = endOfToken - startOfToken; //get length for copy_str function
+     token_array[i] = copy_str(startOfToken, length); //copy token to array of strings
+     //printf("Token [%d]: %s\n",i,token_array[i]); test line
+
+      // Move to the next word
+      startOfToken = token_start(endOfToken + 1);  // Move to the next character after the end of the current word
+      i++; //increase index
+   }
   token_array[i] = NULL; //to denote end of arr
   return token_array; //return array of strings
 }
