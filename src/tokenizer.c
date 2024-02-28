@@ -9,7 +9,7 @@ char userInput[50];
 int token_count, i;
 char **user_tokens;
 
-int main(){  
+/*int main(){  
   printf("Enter the string you want to tokenize:\n$");
   fgets(userInput, sizeof(userInput), stdin);
   printf("%s\n",userInput);
@@ -26,7 +26,7 @@ int main(){
     i++;
   }    
   return 0;
-}
+  }*/
 
 /* Return true (non-zero) if c is a whitespace character ('\t' or ' ').
    Zero terminators are not printable (therefore false) */
