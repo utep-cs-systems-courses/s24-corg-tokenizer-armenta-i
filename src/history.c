@@ -99,13 +99,13 @@ void add_history(List *list, char *str){
 */
 /*Print the entire contents of the list. */
 void print_history(List *list){
-  Item *currList = (Item *)malloc(sizeof(Item));
+  Item *currItem = (Item *)malloc(sizeof(Item));
   if(list->root == NULL){
     printf("Empty history");
     return;
   }
 
-  char *currItem = list->root;
+  currItem = list->root;
   printf("History: ");
   while(currItem != NULL){
     printf("(%d , %s) --",currItem->id, currItem->str);
