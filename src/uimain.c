@@ -22,7 +22,7 @@ char **user_tokens;
     i=0;                                                     
     //print_tokens(user_tokens);                             
     while(i < token_count){                                 
-      printf("ARRAY: %s\n", user_tokens[i]);                 
+      printf("Token [%d]: %s\n", i, user_tokens[i]);                 
       i++;                                                   
     }                                                        
     return 0;                                                

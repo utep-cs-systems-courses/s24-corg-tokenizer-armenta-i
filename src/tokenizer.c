@@ -1,7 +1,6 @@
 #include "tokenizer.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 char userInput[50];
 //Array of tokenized user input

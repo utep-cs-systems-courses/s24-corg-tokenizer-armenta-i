@@ -9,17 +9,7 @@
   item_one.next = item_two;
 */
 
-typedef struct s_Item {
-  int id;
-  char *str;
-  struct s_Item *next;
-} Item;
-
-typedef struct s_List {
-  struct s_Item *root;
-} List;
-
-int main() {
+/*int main() {
   // Create a new list
   List *myList = init_history();
 
@@ -35,49 +25,81 @@ int main() {
   freeList(myList);
 
   return 0;
-}
+  }*/
 
+// Create item that goes in linked list
+Item *newItem(int id, char *str){
+  Item *newItem = (Item *)malloc(sizeof(Item)); //Allocate space for newItemc
+  if(newItem != NULL){
+    newItem->id = id;
+
+    size_t stringLen = 0;
+    while(str[stringLen] != '\0'){
+      stringLen++;
+    }
+    //Allocating memory for string and copying it 
+    newItem->str = (char *)malloc(sizeof(stringLen + 1));
+    if(newItem->str != NULL){
+      //Copy string by char
+      for(int i = 0; i < stringLen;i++){
+	newItem->str[i] = str[i];
+      }
+    } else{
+      free(newItem);
+      return NULL;
+    }
+
+    newItem->next = NULL;
+  }
+  return newItem;
+}
 /* Initialize the linked list to keep the history. */
 List *init_history(){
 
-  List *history_list = (List * )malloc(sizeof(List));
+  List *history_list = (List *)malloc(sizeof(List));
   if(history_list != NULL){
     history_list->root = NULL; //Initialize empty root
   }
+  return history_list;
 }
 
 //Function to add string to list
 void add_history(List *list, char *str){
-  if(list == NULL || str == NULL){
-    return NULL;
-  }
+  Item *newStr = (Item *)malloc(sizeof(Item));
 
-  if(list->root == NULL){
-    list->root = str; //put str on root if list is emtpy
-  } else{
-    //Have to traverse list to find where to put str
-    char *currItem = list->root;
-    while(currItem->next != NULL){
-      currItem = currItem->next;
-    }
-    currItem = currItem->next;
+  //Assigning newList
+  if(newStr != NULL){
+    newStr->id = 0;  //need to decide which id goes in
+    newStr->str = str; //string goes into newStr
+    newStr->next = NULL; //newStr is last item on list so next is null
   }
   
+  if(list->root == NULL){
+    list->root = newStr; //put str on root if list is emtpy
+  } else{
+    //Have to traverse list to find where to put str
+    Item *currStr = list->root;
+    while(currStr->next != NULL){
+      currStr = currStr->next;
+    }
+    currStr->next = newStr;
+  }  
 }
 
 /* Retrieve the string stored in the node where Item->id == id.                                                        
    List* list - the linked list                                                                                        
    int id - the id of the Item to find */
-char *get_history(List *list, int id){
+/*char *get_history(List *list, int id){
   if(list == NULL){
     return;
   }
 
   
 }
-
+*/
 /*Print the entire contents of the list. */
 void print_history(List *list){
+  Item *currList = (Item *)malloc(sizeof(Item));
   if(list->root == NULL){
     printf("Empty history");
     return;
@@ -86,13 +108,13 @@ void print_history(List *list){
   char *currItem = list->root;
   printf("History: ");
   while(currItem != NULL){
-    printf("(%d , %s) --",current->id, current->str);
+    printf("(%d , %s) --",currItem->id, currItem->str);
   }
   printf("------------------");
 }
 
 /*Free the history list and the strings it references. */
-void free_history(List *list){
+/*void free_history(List *list){
   if(list == NULL){
     return;
   }
@@ -106,3 +128,5 @@ void free_history(List *list){
   }
   free(list); //Free entire list
 }
+
+*/
