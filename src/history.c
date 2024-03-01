@@ -3,22 +3,27 @@
 #include "history.h"
 
 
-int main() {
+/*int main() {
   
   // Testing init_history function
   List *myList = init_history();
       
   //Testing add_history function
   add_history(myList, "First");
+  add_history(myList, "Second");
+  add_history(myList, "Third");
 
-  printf("History: \n");
+  //Testing get_history
+  char *saver = get_history(myList,2);
+  printf("ID: 2%s\n", saver);
+  //Testing print_history function
   print_history(myList);
 
   //Testing free_history function
-  //free_history(myList);
+  free_history(myList);
   
   return 0;
-  }
+  }*/
 
 /* Initialize the linked list to keep the history. */
 List *init_history(){
@@ -32,7 +37,7 @@ List *init_history(){
 
 //Function to add string to list
 void add_history(List *list, char *str){
-  static int num_id = 0;
+  static int num_id = 1;
   
   Item *newStr = (Item *)malloc(sizeof(Item));
   if(list == NULL){ //This if statement checks to see if list is empty
@@ -86,7 +91,7 @@ char *get_history(List *list, int id){
   //Traverse List to find item
   while(currItem != NULL){ 
     if(currItem->id == id){ //Looking for id
-      return currItem->str; //Returns string that has same is as param.
+      return currItem->str; //Returns string that has same id as param.
     }
     currItem = currItem->next; //Move to next item in list
   }
@@ -97,19 +102,19 @@ char *get_history(List *list, int id){
 void print_history(List *list){
   //Item *currItem = (Item *)malloc(sizeof(Item));
   if(list->root == NULL || list == NULL){
-    printf("Empty history");
+    printf("Empty history\n");
     return;
   }
 
   Item *currItem = list->root;
-  printf("History: ");
+  printf("History: \n");
   
   while(currItem != NULL){
     if(currItem->str != NULL){
-      printf("(%d , %s) --",currItem->id, currItem->str);
+      printf("(ID:[%d] , %s)\n",currItem->id, currItem->str);
       currItem = currItem->next;
     } else {
-      printf("(%d , NULL) --",currItem->id);
+      printf("(%d , NULL)\n",currItem->id);
     }
   }
   printf("\n------------------\n");

@@ -8,25 +8,6 @@ char userInput[50];
 int token_count, i;
 char **user_tokens;
 
-/*int main(){  
-  printf("Enter the string you want to tokenize:\n$");
-  fgets(userInput, sizeof(userInput), stdin);
-  printf("%s\n",userInput);
-
-  user_tokens = tokenize(userInput);
-  token_count = count_tokens(userInput);
-  printf("NUM %d\n", token_count);
-
-  //code below is used to test for answers
-  i=1;
-  //print_tokens(user_tokens);
-  while(i <= token_count){
-    printf("ARRAY: %s\n", user_tokens[i]);
-    i++;
-  }    
-  return 0;
-  }*/
-
 /* Return true (non-zero) if c is a whitespace character ('\t' or ' ').
    Zero terminators are not printable (therefore false) */
 int space_char(char c){
