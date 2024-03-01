@@ -2,60 +2,27 @@
 #include <stdlib.h>
 #include "history.h"
 
-/*s_Item item_one = {1, "hello world ams", NULL};
-  s_Item item_two = {2, "bye world ams" , NULL};
-  List item_list;
-  item_list.root = item_one;
-  item_one.next = item_two;
-*/
 
-/*int main() {
-  // Create a new list
+int main() {
+  
+  // Testing init_history function
   List *myList = init_history();
+      
+  //Testing add_history function
+  add_history(myList, "First");
 
-  // Add items to the list
-  addHistory(myList, createItem( "First Item"));
-  addHistory(myList, createItem(2, "Second Item"));
-  addHistory(myList, createItem(3, "Third Item"));
+  printf("History: \n");
+  print_history(myList);
 
-  // Print the contents of the list
-  printList(myList);
-
-  // Free the memory used by the list and its items
-  freeList(myList);
-
+  //Testing free_history function
+  //free_history(myList);
+  
   return 0;
-  }*/
-
-// Create item that goes in linked list
-Item *newItem(int id, char *str){
-  Item *newItem = (Item *)malloc(sizeof(Item)); //Allocate space for newItemc
-  if(newItem != NULL){
-    newItem->id = id;
-
-    size_t stringLen = 0;
-    while(str[stringLen] != '\0'){
-      stringLen++;
-    }
-    //Allocating memory for string and copying it 
-    newItem->str = (char *)malloc(sizeof(stringLen + 1));
-    if(newItem->str != NULL){
-      //Copy string by char
-      for(int i = 0; i < stringLen;i++){
-	newItem->str[i] = str[i];
-      }
-    } else{
-      free(newItem);
-      return NULL;
-    }
-
-    newItem->next = NULL;
   }
-  return newItem;
-}
+
 /* Initialize the linked list to keep the history. */
 List *init_history(){
-
+  //Allocating space for string
   List *history_list = (List *)malloc(sizeof(List));
   if(history_list != NULL){
     history_list->root = NULL; //Initialize empty root
@@ -65,68 +32,102 @@ List *init_history(){
 
 //Function to add string to list
 void add_history(List *list, char *str){
+  static int num_id = 0;
+  
   Item *newStr = (Item *)malloc(sizeof(Item));
+  if(list == NULL){ //This if statement checks to see if list is empty
+    fprintf(stderr, "memory allocation failed\n");
+    return;
+  }
 
-  //Assigning newList
-  if(newStr != NULL){
-    newStr->id = 0;  //need to decide which id goes in
-    newStr->str = str; //string goes into newStr
-    newStr->next = NULL; //newStr is last item on list so next is null
+  int len = 0;
+  //Get lenght of string
+  while (str[len] != '\0'){
+    len++;
+  }
+
+  //allocated memory for string on new item
+  newStr->str = (char *)malloc((len + 1)*(sizeof(char)));
+  if(newStr == NULL){
+    fprintf(stderr, "Failed to create memory for newStr");
+  }
+
+  //Loop to copy str by char
+  for(int i = 0; i < len; i++){
+    newStr->str[i] = str[i];
   }
   
-  if(list->root == NULL){
-    list->root = newStr; //put str on root if list is emtpy
+   //to denote end of str
+  newStr->next = NULL; //Set next item on list empy
+
+  if(list->root == NULL){ //if list is empty
+    newStr->id = num_id;
+    list->root = newStr; //set root to str
   } else{
-    //Have to traverse list to find where to put str
-    Item *currStr = list->root;
-    while(currStr->next != NULL){
-      currStr = currStr->next;
+    Item *currentStr = list->root;
+    //copy root to Item that is going to iterate
+    while(currentStr->next != NULL){ //iterate until empty space 
+      currentStr = currentStr->next;
     }
-    currStr->next = newStr;
-  }  
+    newStr->id = currentStr->id + 1;
+    currentStr->next = newStr;     
+  }
+  num_id++;
 }
 
 /* Retrieve the string stored in the node where Item->id == id.                                                        
    List* list - the linked list                                                                                        
    int id - the id of the Item to find */
-/*char *get_history(List *list, int id){
-  if(list == NULL){
-    return;
+char *get_history(List *list, int id){
+  Item *currItem = list->root;
+  if(list == NULL || list->root ==NULL){
+    return NULL;
+  }
+  //Traverse List to find item
+  while(currItem != NULL){ 
+    if(currItem->id == id){ //Looking for id
+      return currItem->str; //Returns string that has same is as param.
+    }
+    currItem = currItem->next; //Move to next item in list
+  }
+  return NULL; //No string with matching id was found
   }
 
-  
-}
-*/
 /*Print the entire contents of the list. */
 void print_history(List *list){
-  Item *currItem = (Item *)malloc(sizeof(Item));
-  if(list->root == NULL){
+  //Item *currItem = (Item *)malloc(sizeof(Item));
+  if(list->root == NULL || list == NULL){
     printf("Empty history");
     return;
   }
 
-  currItem = list->root;
+  Item *currItem = list->root;
   printf("History: ");
+  
   while(currItem != NULL){
-    printf("(%d , %s) --",currItem->id, currItem->str);
+    if(currItem->str != NULL){
+      printf("(%d , %s) --",currItem->id, currItem->str);
+      currItem = currItem->next;
+    } else {
+      printf("(%d , NULL) --",currItem->id);
+    }
   }
-  printf("------------------");
+  printf("\n------------------\n");
 }
 
 /*Free the history list and the strings it references. */
-/*void free_history(List *list){
+void free_history(List *list){
+  Item *currItem = (Item *)malloc(sizeof(Item));
   if(list == NULL){
     return;
   }
 
-  char *currItem = list->root; //Get head of list
+  currItem = list->root; //Get head of list
   while(currItem != NULL){
-    char *nextItem = currItem->next; //pointer to move through list
+    Item *nextItem = currItem->next; //pointer to move through list
     free(currItem->str); //Clears memory for string 
     free(currItem); //Clears memeory for current item on list
     currItem = nextItem; //currItem gets updated to next item in list
   }
   free(list); //Free entire list
 }
-
-*/
