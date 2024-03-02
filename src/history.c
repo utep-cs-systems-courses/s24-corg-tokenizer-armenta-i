@@ -2,29 +2,6 @@
 #include <stdlib.h>
 #include "history.h"
 
-
-/*int main() {
-  
-  // Testing init_history function
-  List *myList = init_history();
-      
-  //Testing add_history function
-  add_history(myList, "First");
-  add_history(myList, "Second");
-  add_history(myList, "Third");
-
-  //Testing get_history
-  char *saver = get_history(myList,2);
-  printf("ID: 2%s\n", saver);
-  //Testing print_history function
-  print_history(myList);
-
-  //Testing free_history function
-  free_history(myList);
-  
-  return 0;
-  }*/
-
 /* Initialize the linked list to keep the history. */
 List *init_history(){
   //Allocating space for string
@@ -38,7 +15,7 @@ List *init_history(){
 //Function to add string to list
 void add_history(List *list, char *str){
   static int num_id = 1;
-  
+  char historyString [100];
   Item *newStr = (Item *)malloc(sizeof(Item));
   if(list == NULL){ //This if statement checks to see if list is empty
     fprintf(stderr, "memory allocation failed\n");
@@ -117,7 +94,7 @@ void print_history(List *list){
       printf("(%d , NULL)\n",currItem->id);
     }
   }
-  printf("\n------------------\n");
+  printf("------------------\n");
 }
 
 /*Free the history list and the strings it references. */
