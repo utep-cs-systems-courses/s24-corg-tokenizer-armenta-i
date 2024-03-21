@@ -2,6 +2,8 @@ Project 1: Tokenizer
 ====================
 # Instructions:
 
+Must run uimain to be able to use all provided files. User Interface contains the controls for the tokenizer and the history.
+
 You should document your tokenizer in this file.
 
 This file is written in the refreshingly simple `markdown` text
