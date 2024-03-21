@@ -15,3 +15,6 @@ How to run work done on Lab 2:
 To be demo Lab 2, uimain is the hub to test tokenizer and history.
 In user interface, it explains what commands to type on the terminal to be able
 to test the desired stuff.
+
+To see how tokenizer works, code is in tokenizer file and methods declarations
+are on the header files.
